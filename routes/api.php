@@ -36,7 +36,7 @@ Route::group([
     Route::post('me', [AuthController::class,'me']);
     
 });
-
+Route::post('roldeusuario', [UserController::class,'asignarRoles']);
 Route::middleware(['jwt.verify'])->group(function () {
     Route::apiResource('usuarios', UserController::class);
     Route::apiResource('roles', RolesController::class);

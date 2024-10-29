@@ -4,13 +4,13 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Usuarios;
 use App\Http\Requests\StoreUserRequest;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
-use App\Models\User; // <- Importación de User
+use App\Models\User; // <- Importación de User 
+use App\Models\UserRole;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class UserController extends Controller
@@ -160,4 +160,40 @@ class UserController extends Controller
     {
         //
     }
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function asignarRoles(Request $request){
+        try {
+            // Validar los datos del request
+            $validatedData = $request->validate([
+                'iduser' => 'required|numeric',
+                'idrol' => 'required|numeric'
+            ]);
+
+            // Obtener el iduser del request
+            $id = $validatedData['iduser'];
+
+            // Buscar los roles por usuario y eliminarlos
+            UserRole::where('iduser', $id)->delete();
+
+            // Crear el nuevo rol para el usuario
+            $userRole = UserRole::create([
+                'iduser' => $id,
+                'idrol' => $validatedData['idrol']
+            ]);
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Rol asignado correctamente',
+                'data' => $userRole
+            ], 200); // Código de estado 200 para éxito
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Error al registrar el rol de usuario: ' . $th->getMessage()
+            ], 500); // Código de estado 500 para errores generales
+        }
+    }
+
 }
