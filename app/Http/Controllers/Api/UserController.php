@@ -162,7 +162,7 @@ class UserController extends Controller
     }
     /**
      * Remove the specified resource from storage.
-     */
+    */
     public function asignarRoles(Request $request){
         try {
             // Validar los datos del request

@@ -78,5 +78,9 @@ Dependendcias de la aplicacion laravel
 BORRAR CACHES
 ## php artisan route:clear
 ## php artisan route:cache
-
+*/
+/*MIGRAR LAS TABLAS DE LA BASE DE DATOS
+## php artisan migrate --path=/database/migrations/2024_XX_XX_XXXXXX_create_armas_table.php
+PARA CREAR LAS TABLASE MIGRACION
+## php artisan make:migration armas_table 
 */

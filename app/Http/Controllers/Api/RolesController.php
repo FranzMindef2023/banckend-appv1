@@ -20,10 +20,12 @@ class RolesController extends Controller
     public function index()
     {
         try{
+            // Obtener todos los usuarios de la base de datos
+            $response = Roles::all();
             return response()->json([
                 'status' => true,
                 'message' => 'Datos de entrada no válidos.',
-                'errors' => "validado" // Retornar los errores de validación
+                'data' => $response // Retornar los errores de validación
             ], 200); // Código de estado 422 para errores de validación
         }catch(\Throwable $th){
             return response()->json([
@@ -85,9 +87,35 @@ class RolesController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, int $id)
     {
-        //
+        try {
+            // Buscar el usuario por iduser
+            $response = Roles::where('idrol', $id)->firstOrFail();
+
+            // Validar los datos del request
+            $validatedData = $request->validate([
+                'rol' => 'sometimes|string|min:3|max:30|unique:roles,rol,' . $id . ',idrol', // Cambiar a iduser Asegúrate de validar la contraseña si se proporciona
+            ]);
+            // Actualizar el usuario con los datos validados
+            $response->update($validatedData);
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Rol de Usuario actualizado correctamente',
+                'data' => $response
+            ], 200); // Código de estado 200 para éxito
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Rol de Usuario no encontrado'
+            ], 404); // Código de estado 404 para no encontrado
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Error al actualizar el rol de usuario: ' . $th->getMessage()
+            ], 500); // Código de estado 500 para errores generales
+        }
     }
 
     /**
