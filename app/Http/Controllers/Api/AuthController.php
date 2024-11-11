@@ -35,12 +35,17 @@ class AuthController extends Controller
     public function login()
     {
         $credentials = request(['email', 'password']);
-        // return $credentials;
-        if (! $token = auth()->attempt($credentials)) {
-            return $credentials;
-            return response()->json(['error' => 'Unauthorized'], 401);
-        }
 
+        // Intentar autenticar al usuario con las credenciales proporcionadas
+        if (!$token = auth()->attempt($credentials)) {
+            return response()->json(['status' => false, 'message' => 'Credenciales incorrectas'], 401);
+        }
+    
+        // Actualizar la fecha de último inicio de sesión
+        $user = auth()->user();
+        $user->update(['last_login' => now()]);
+    
+        // Responder con el token y los datos del usuario
         return $this->respondWithToken($token);
 
     }
@@ -86,11 +91,29 @@ class AuthController extends Controller
      */
     protected function respondWithToken($token)
     {
+        $user = auth()->user();
+
         return response()->json([
+            'status' => true,
+            'message' => 'Inicio de sesión exitoso',
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60
-        ]);
+            'expires_in' => auth()->factory()->getTTL() * 60, // Tiempo de expiración en segundos
+            'post' => [
+                'iduser' => $user->iduser,
+                'ci' => $user->ci,
+                'nombres' => $user->nombres,
+                'appaterno' => $user->appaterno,
+                'apmaterno' => $user->apmaterno,
+                'email' => $user->email,
+                'celular' => $user->celular,
+                'usuario' => $user->usuario,
+                'status' => $user->status,
+                'last_login' => $user->last_login,
+                'created_at' => $user->created_at,
+                'updated_at' => $user->updated_at,
+            ]
+        ], 200);
     }
     public function register(Request $request)
 {

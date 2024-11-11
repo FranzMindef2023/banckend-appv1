@@ -50,6 +50,11 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request)
     {
+        return response()->json([
+            'status' => true,
+            'message' => 'Usuario registrado correctamente',
+            'data'=> $request->all()
+        ], 200);
         try {
             // Crea el usuario utilizando los datos validados del request
             $user = User::create(array_merge(
