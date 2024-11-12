@@ -18,6 +18,11 @@ return new class extends Migration
             $table->bigInteger('idpadre')->nullable(); // idpadre como bigint, nullable si puede ser raíz
             $table->timestamps();            // created_at y updated_at
         });
+        DB::table('organizacion')->insert([
+            'nomorg' => 'MINSITERIO',
+            'sigla' => 'MINDEF',
+            'idpadre' => 0,
+        ]);
     }
 
     /**

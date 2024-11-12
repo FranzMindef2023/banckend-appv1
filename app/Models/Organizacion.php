@@ -11,7 +11,8 @@ class Organizacion extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
     use HasFactory, Notifiable;
-
+    // Define el nombre correcto de la tabla
+    protected $table = 'organizacion';
     // Establecer la clave primaria
     protected $primaryKey = 'idorg';
 

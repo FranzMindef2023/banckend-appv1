@@ -7,6 +7,12 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\RolesController;
 use App\Http\Controllers\Api\AuthController;
 
+use App\Http\Controllers\Api\OrganizacionController;
+use App\Http\Controllers\Api\NovedadesController;
+use App\Http\Controllers\Api\PersonasController;
+use App\Http\Controllers\Api\PuestosController;
+use App\Http\Controllers\Api\TipoNovedadesController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -42,4 +48,5 @@ Route::post('roldeusuario', [UserController::class,'asignarRoles']);
 Route::middleware(['jwt.verify'])->group(function () {
     Route::apiResource('usuarios', UserController::class);
     Route::apiResource('roles', RolesController::class);
+    Route::apiResource('organizacion', OrganizacionController::class);
 });

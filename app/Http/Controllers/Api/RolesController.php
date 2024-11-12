@@ -95,7 +95,7 @@ class RolesController extends Controller
 
             // Validar los datos del request
             $validatedData = $request->validate([
-                'rol' => 'sometimes|string|min:3|max:30|unique:roles,rol,' . $id . ',idrol', // Cambiar a iduser Asegúrate de validar la contraseña si se proporciona
+                'rol' => 'sometimes|string|min:3|max:30|unique:roles,rol,' . $id . ',idrol', 
             ]);
             // Actualizar el usuario con los datos validados
             $response->update($validatedData);

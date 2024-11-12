@@ -13,7 +13,7 @@ class StoreOrganizacionRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -25,7 +25,7 @@ class StoreOrganizacionRequest extends FormRequest
     {
         return [
             'nomorg' => 'required|string|max:100',
-            'sigla' => 'required|string|max:30|unique:puestos,sigl',
+            'sigla' => 'required|string|max:30|unique:organizacion,sigla',
             'idpadre' => 'nullable|exists:organizacion,idorg',
         ];
     }
