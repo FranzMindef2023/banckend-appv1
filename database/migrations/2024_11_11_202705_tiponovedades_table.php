@@ -11,7 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        //
+        Schema::create('tiponovedad', function (Blueprint $table) {
+            $table->increments('idnov');        // Identificador único
+            $table->string('novedad', 100);     // Tipo de novedad (Permiso, Vacaciones, etc.)
+            $table->timestamps();               // created_at & updated_at
+        });
+        
     }
 
     /**
@@ -19,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('tiponovedad');
     }
 };
