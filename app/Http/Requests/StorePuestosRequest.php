@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Validation\Rule;
 
 class StorePuestosRequest extends FormRequest
 {
@@ -23,10 +24,22 @@ class StorePuestosRequest extends FormRequest
      */
     public function rules(): array
     {
-        $id = $this->route('puestos');
+       // Asegúrate de obtener el ID correctamente
+       $id = $this->route('puesto') ?? null;
+
         return [
-            'nompuesto' => 'required|string|max:100|unique:puestos,nompuesto,'. $id . ',idpuesto',
-            'sigla' => 'required|string|max:10|unique:puestos,sigla,'. $id . ',idpuesto',
+            'nompuesto' => [
+                'required',
+                'string',
+                'max:100',
+                Rule::unique('puestos', 'nompuesto')->ignore($id, 'idpuesto')
+            ],
+            'sigla' => [
+                'required',
+                'string',
+                'max:10',
+                Rule::unique('puestos', 'sigla')->ignore($id, 'idpuesto')
+            ],
             'idorg' => 'required|exists:organizacion,idorg',
         ];
     }

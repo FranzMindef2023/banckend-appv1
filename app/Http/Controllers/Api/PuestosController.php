@@ -19,7 +19,36 @@ class PuestosController extends Controller
      */
     public function index()
     {
-        //
+        try {
+            // Obtener todas las organizaciones de la base de datos
+            $puesto = Puestos::all();
+        
+            // Verificar si no se encontraron puesto
+            if ($puesto->isEmpty()) {
+                // Si no se encuentra ninguna organización, retornar un error 404
+                throw new \Illuminate\Database\Eloquent\ModelNotFoundException('No se encontraron puestos.');
+            }
+        
+            // Retornar una respuesta exitosa con los datos encontrados
+            return response()->json([
+                'status' => true,
+                'message' => 'No se encontraron puestos',
+                'data' => $puesto
+            ], 200);
+        
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            // Manejar el caso cuando no se encuentran organizaciones (404)
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage()
+            ], 404);
+        } catch (\Exception $e) {
+            // Manejo de errores generales (500)
+            return response()->json([
+                'status' => false,
+                'message' => 'Error al obtener las puestos: ' . $e->getMessage()
+            ], 500);
+        }        
     }
 
     /**
@@ -36,7 +65,7 @@ class PuestosController extends Controller
     public function store(StorePuestosRequest $request)
     {
         try {
-            $user = Puestos::create(array_merge(
+            $puesto = Puestos::create(array_merge(
                 $request->validated()
             ));
 
@@ -99,7 +128,6 @@ class PuestosController extends Controller
      */
     public function update(StorePuestosRequest $request, int  $id)
     {
-        return $request->all();
         try {
             // Buscar el puesto por su ID
             $puesto = Puestos::where('idpuesto', $id)->firstOrFail();

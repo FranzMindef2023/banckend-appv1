@@ -21,20 +21,35 @@ class UserController extends Controller
     public function index()
     {
         try {
-            // Obtener todos los usuarios de la base de datos
+            // Obtener todas las organizaciones de la base de datos
             $users = User::all();
-    
+        
+            // Verificar si no se encontraron puesto
+            if ($users->isEmpty()) {
+                // Si no se encuentra ninguna organización, retornar un error 404
+                throw new \Illuminate\Database\Eloquent\ModelNotFoundException('No se encontraron puestos.');
+            }
+        
+            // Retornar una respuesta exitosa con los datos encontrados
             return response()->json([
                 'status' => true,
                 'message' => 'Lista de usuarios obtenida correctamente.',
                 'data' => $users
-            ], 200); // Código de estado 200 para éxito
-        } catch (\Throwable $th) {
+            ], 200);
+        
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            // Manejar el caso cuando no se encuentran organizaciones (404)
             return response()->json([
                 'status' => false,
-                'message' => $th->getMessage()
-            ], 500); // Código de estado 500 para errores generales
-        }
+                'message' => $e->getMessage()
+            ], 404);
+        } catch (\Exception $e) {
+            // Manejo de errores generales (500)
+            return response()->json([
+                'status' => false,
+                'message' => 'Error al obtener las usuarios: ' . $e->getMessage()
+            ], 500);
+        }  
     }
 
     /**
@@ -50,16 +65,9 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request)
     {
-        return response()->json([
-            'status' => true,
-            'message' => 'Usuario registrado correctamente',
-            'data'=> $request->all()
-        ], 200);
         try {
-            // Crea el usuario utilizando los datos validados del request
             $user = User::create(array_merge(
-                $request->validated(), // Usa los datos validados del request
-                ['password' => bcrypt($request->password)]
+                $request->validated()
             ));
 
             return response()->json([
@@ -72,34 +80,38 @@ class UserController extends Controller
             return response()->json([
                 'status' => false,
                 'message' => $th->getMessage()
-            ], 500); // Código de estado 500 para errores generales
+            ], 500); 
         }
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(int $id)
     {
         try {
             // Buscar el usuario por ID
             $user = User::findOrFail($id);
-
+    
+            // Retornar una respuesta exitosa con los detalles de la organización
             return response()->json([
                 'status' => true,
                 'message' => 'Usuario encontrado.',
                 'data' => $user
-            ], 200); // Código de estado 200 para éxito
-        } catch (ModelNotFoundException $e) {
+            ], 200); // Código de estado 200 para una solicitud exitosa
+    
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            // Si no se encuentra la organización, retornar un error 404
             return response()->json([
                 'status' => false,
-                'message' => 'Usuario no encontrado.'
-            ], 404); // Código de estado 404 para no encontrado
-        } catch (\Throwable $th) {
+                'message' => 'Usuario encontrado.'
+            ], 404);
+        } catch (\Exception $e) {
+            // Manejo de errores generales
             return response()->json([
                 'status' => false,
-                'message' => 'Error al obtener el usuario: ' . $th->getMessage()
-            ], 500); // Código de estado 500 para errores generales
+                'message' => 'Error al obtener el usuario: ' . $e->getMessage()
+            ], 500);
         }
     }
     /**
@@ -113,18 +125,13 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id){
+    public function update(StoreUserRequest $request, int $id){
         try {
             // Buscar el usuario por iduser
             $user = User::where('iduser', $id)->firstOrFail();
 
             // Validar los datos del request
-            $validatedData = $request->validate([
-                'usuario' => 'sometimes|string|max:255|unique:users,usuario,' . $id . ',iduser', // Cambiar a iduser
-                'email' => 'sometimes|email|max:255|unique:users,email,' . $id . ',iduser', // Cambiar a iduser
-                'ci' => 'sometimes|string|unique:users,ci,' . $id . ',iduser', // Cambiar a iduser
-                'password' => 'sometimes|string|min:8', // Asegúrate de validar la contraseña si se proporciona
-            ]);
+            $user->update($request->validated());
 
             // Verificar si se proporcionó un valor de contraseña no vacío
                 if ($request->filled('password')) {

@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Validation\Rule;
 
 class StoreOrganizacionRequest extends FormRequest
 {
@@ -23,10 +24,22 @@ class StoreOrganizacionRequest extends FormRequest
      */
     public function rules(): array
     {
-        $id = $this->route('organizacion');
+        // Obtener el ID del recurso actual desde la ruta
+        $id = $this->route('organizacion') ?? null;
+        logger("ID obtenido desde la ruta: " . json_encode($id));
+   
+       // Si no se obtiene el ID, devuelve un error de validación personalizado
+       if (is_null($id)) {
+           logger("ID no obtenido correctamente desde la ruta.");
+       }
         return [
             'nomorg' => 'required|string|max:100',
-            'sigla' => 'required|string|max:30|unique:organizacion,sigla,' . $id . ',idorg',
+            'sigla' => [
+                'required',
+                'string',
+                'max:30',
+                Rule::unique('organizacion', 'sigla')->ignore($id, 'idorg')
+            ],
             'idpadre' => 'nullable|integer|exists:organizacion,idorg',
         ];
     }
