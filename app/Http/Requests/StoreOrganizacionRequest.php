@@ -23,10 +23,11 @@ class StoreOrganizacionRequest extends FormRequest
      */
     public function rules(): array
     {
+        $id = $this->route('organizacion');
         return [
             'nomorg' => 'required|string|max:100',
-            'sigla' => 'required|string|max:30|unique:organizacion,sigla',
-            'idpadre' => 'nullable|exists:organizacion,idorg',
+            'sigla' => 'required|string|max:30|unique:organizacion,sigla,' . $id . ',idorg',
+            'idpadre' => 'nullable|integer|exists:organizacion,idorg',
         ];
     }
     public function messages()

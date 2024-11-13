@@ -19,20 +19,36 @@ class OrganizacionController extends Controller
      */
     public function index()
     {
-        try{
-            // Obtener todos los usuarios de la base de datos
-            $response = Organizacion::all();
+        try {
+            // Obtener todas las organizaciones de la base de datos
+            $organizaciones = Organizacion::all();
+        
+            // Verificar si no se encontraron organizaciones
+            if ($organizaciones->isEmpty()) {
+                // Si no se encuentra ninguna organización, retornar un error 404
+                throw new \Illuminate\Database\Eloquent\ModelNotFoundException('No se encontraron organizaciones.');
+            }
+        
+            // Retornar una respuesta exitosa con los datos encontrados
             return response()->json([
                 'status' => true,
-                'message' => 'Datos de entrada no válidos.',
-                'data' => $response // Retornar los errores de validación
-            ], 200); // Código de estado 422 para errores de validación
-        }catch(\Throwable $th){
+                'message' => 'Organizaciones encontradas',
+                'data' => $organizaciones
+            ], 200);
+        
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            // Manejar el caso cuando no se encuentran organizaciones (404)
             return response()->json([
                 'status' => false,
-                'message' => $th->getMessage()
-            ], 500); // Código de estado 500 para errores generales
-        }
+                'message' => $e->getMessage()
+            ], 404);
+        } catch (\Exception $e) {
+            // Manejo de errores generales (500)
+            return response()->json([
+                'status' => false,
+                'message' => 'Error al obtener las organizaciones: ' . $e->getMessage()
+            ], 500);
+        }        
     }
 
     /**
@@ -49,9 +65,9 @@ class OrganizacionController extends Controller
     public function store(StoreOrganizacionRequest $request)
     {
         try {
-            // $user = Organizacion::create(array_merge(
-            //     $request->validated()
-            // ));
+            $organizacion = Organizacion::create(array_merge(
+                $request->validated()
+            ));
 
             return response()->json([
                 'status' => true,
@@ -109,7 +125,7 @@ class OrganizacionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(StoreOrganizacionRequest $request, string $id)
+    public function update(StoreOrganizacionRequest $request, int $id)
     {
         try {
             // Buscar la organización por su ID
@@ -172,4 +188,38 @@ class OrganizacionController extends Controller
             ], 500);
         }
     }
+    public function obtenerHijos(int $id){
+        try {
+            // Buscar la organización padre por su ID
+            $organizacionPadre = Organizacion::findOrFail($id);
+
+            // Obtener las organizaciones hijas
+            $hijos = $organizacionPadre->hijos;
+
+            // Verificar si tiene hijos
+            if ($hijos->isEmpty()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'No se encontraron organizaciones hijas para el ID '.$id.' proporcionado.'
+                ], 404);
+            }
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Organizaciones hijas encontradas.',
+                'data' => $hijos
+            ], 200);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Organización no encontrada.'
+            ], 404);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Error al obtener las organizaciones hijas: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
 }

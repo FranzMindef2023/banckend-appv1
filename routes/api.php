@@ -49,4 +49,7 @@ Route::middleware(['jwt.verify'])->group(function () {
     Route::apiResource('usuarios', UserController::class);
     Route::apiResource('roles', RolesController::class);
     Route::apiResource('organizacion', OrganizacionController::class);
+    Route::get('organizacion/{id}/hijos', [OrganizacionController::class, 'obtenerHijos']);
+
+    Route::apiResource('puestos', PuestosController::class);
 });

@@ -23,9 +23,10 @@ class StorePuestosRequest extends FormRequest
      */
     public function rules(): array
     {
+        $id = $this->route('puestos');
         return [
-            'nompuesto' => 'required|string|max:100|unique:puestos,nompuesto',
-            'sigla' => 'required|string|max:10|unique:puestos,sigla',
+            'nompuesto' => 'required|string|max:100|unique:puestos,nompuesto,'. $id . ',idpuesto',
+            'sigla' => 'required|string|max:10|unique:puestos,sigla,'. $id . ',idpuesto',
             'idorg' => 'required|exists:organizacion,idorg',
         ];
     }

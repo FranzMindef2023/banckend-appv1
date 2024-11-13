@@ -22,4 +22,9 @@ class Organizacion extends Model implements Auditable
         'sigla',
         'idpadre'
     ];
+    // Relación para obtener las organizaciones hijas
+    public function hijos()
+    {
+        return $this->hasMany(Organizacion::class, 'idpadre', 'idorg');
+    }
 }
