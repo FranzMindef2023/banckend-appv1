@@ -26,12 +26,6 @@ class StoreOrganizacionRequest extends FormRequest
     {
         // Obtener el ID del recurso actual desde la ruta
         $id = $this->route('organizacion') ?? null;
-        logger("ID obtenido desde la ruta: " . json_encode($id));
-   
-       // Si no se obtiene el ID, devuelve un error de validación personalizado
-       if (is_null($id)) {
-           logger("ID no obtenido correctamente desde la ruta.");
-       }
         return [
             'nomorg' => 'required|string|max:100',
             'sigla' => [

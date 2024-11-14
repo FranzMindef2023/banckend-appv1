@@ -18,7 +18,6 @@ class Puestos extends Model implements Auditable
     // Campos que pueden ser asignados en masa
     protected $fillable = [
         'nompuesto',
-        'sigla',
-        'idorg'
+        'sigla'
     ];
 }

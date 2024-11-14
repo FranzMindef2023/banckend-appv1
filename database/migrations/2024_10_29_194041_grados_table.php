@@ -15,10 +15,28 @@ return new class extends Migration
             $table->increments('idgrado');  
             $table->string('grado', 50); 
             $table->string('abregrado', 30); 
-            $table->string('tipo', 30); 
+            $table->string('categoria', 30); 
             $table->boolean('status');         // varchar(50)
             $table->timestamps();  // created_at & updated_at timestamps
         });
+        DB::table('grados')->insert([
+            'grado' => 'EJERCITO DE BOLIVIA',
+            'abregrado' => 'EJERCITO DE BOLIVIA',
+            'categoria' => 'EJERCITO DE BOLIVIA',
+            'status' => true],
+            [
+            'grado' => 'EJERCITO DE BOLIVIA',
+            'abregrado' => 'EJERCITO DE BOLIVIA',
+            'categoria' => 'EJERCITO DE BOLIVIA',
+            'status' => true
+            ],
+            [
+            'grado' => 'EJERCITO DE BOLIVIA',
+            'abregrado' => 'EJERCITO DE BOLIVIA',
+            'categoria' => 'EJERCITO DE BOLIVIA',
+            'status' => true
+            ]
+        );
     }
 
     /**

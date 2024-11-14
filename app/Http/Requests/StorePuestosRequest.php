@@ -39,8 +39,7 @@ class StorePuestosRequest extends FormRequest
                 'string',
                 'max:10',
                 Rule::unique('puestos', 'sigla')->ignore($id, 'idpuesto')
-            ],
-            'idorg' => 'required|exists:organizacion,idorg',
+            ]
         ];
     }
     public function messages()
@@ -54,10 +53,7 @@ class StorePuestosRequest extends FormRequest
             'sigla.required' => 'La sigla es obligatoria.',
             'sigla.string' => 'La sigla debe ser un texto.',
             'sigla.max' => 'La sigla no debe superar los 10 caracteres.',
-            'sigla.unique' => 'La sigla ya existe.',
-
-            'idorg.required' => 'El ID de la organización es obligatorio.',
-            'idorg.exists' => 'La organización seleccionada no existe.',
+            'sigla.unique' => 'La sigla ya existe.'
         ];
     }
      protected function failedValidation(Validator $validator)

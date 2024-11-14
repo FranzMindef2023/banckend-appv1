@@ -14,13 +14,49 @@ return new class extends Migration
         Schema::create('puestos', function (Blueprint $table) {
             $table->bigIncrements('idpuesto');  // Usamos bigIncrements para bigint como PK
             $table->string('nompuesto');        // Nombre de la organización
-            $table->string('sigla', 50);     // Sigla de la organización
-            $table->unsignedBigInteger('idorg'); // idpadre como bigint, nullable si puede ser raíz
+            $table->boolean('status');  
             $table->timestamps();            // created_at y updated_at
-
-            // Foreign keys
-            $table->foreign('idorg')->references('idorg')->on('organizacion')->onDelete('cascade');
         });
+        DB::table('puestos')->insert([
+            'nompuesto' => 'MINISTRO',
+            'status' => true],
+            [
+            'nompuesto' => 'VICEMINISTRO',
+            'status' => true
+            ],
+            [
+            'nompuesto' => 'DIRECTOR GENERAL',
+            'status' => true
+            ],
+            [
+            'nompuesto' => 'JEFE DE UNIDAD',
+            'status' => true
+            ],
+            [
+            'nompuesto' => 'RESPONSABLE DE SECCIÓN',
+            'status' => true
+            ],
+            [
+            'nompuesto' => 'TECNICO',
+            'status' => true
+            ],
+            [
+            'nompuesto' => 'SEGURIDAD',
+            'status' => true
+            ],
+            [
+            'nompuesto' => 'COMANDANTE',
+            'status' => true
+            ],
+            [
+            'nompuesto' => 'JEFE DE GABINETE',
+            'status' => true
+            ],
+            [
+            'nompuesto' => 'AYUDANTE',
+            'status' => true
+            ]
+        );
     }
 
     /**

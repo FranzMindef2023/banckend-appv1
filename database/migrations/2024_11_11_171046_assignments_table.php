@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('assignments', function (Blueprint $table) {
             $table->increments('idassig');                // int8, primary     // varchar(250), unique
             $table->bigInteger('gestion');  
-                         // int8
             $table->unsignedBigInteger('idpersona');
             $table->unsignedBigInteger('idorg');
             $table->unsignedBigInteger('idpuesto');

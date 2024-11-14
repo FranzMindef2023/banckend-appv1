@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Validation\Rule;
 
 class StoreRolesRequest extends FormRequest
 {
@@ -23,8 +24,13 @@ class StoreRolesRequest extends FormRequest
      */
     public function rules(): array
     {
+        $id = $this->route('role') ?? null;
         return [
-            'rol' => 'required|string|min:3|max:30|unique:roles,rol',
+            'rol' =>['required',
+                    'string',
+                    'min:3',
+                    'max:30',
+                    Rule::unique('roles', 'rol')->ignore($id, 'idrol')]
         ];
     }
     public function messages()

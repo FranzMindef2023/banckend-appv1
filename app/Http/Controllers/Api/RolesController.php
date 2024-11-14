@@ -19,20 +19,36 @@ class RolesController extends Controller
      */
     public function index()
     {
-        try{
-            // Obtener todos los usuarios de la base de datos
+        try {
+            // Obtener todas las organizaciones de la base de datos
             $response = Roles::all();
+        
+            // Verificar si no se encontraron organizaciones
+            if ($response->isEmpty()) {
+                // Si no se encuentra ninguna organización, retornar un error 404
+                throw new \Illuminate\Database\Eloquent\ModelNotFoundException('No se encontraron roles.');
+            }
+        
+            // Retornar una respuesta exitosa con los datos encontrados
             return response()->json([
                 'status' => true,
-                'message' => 'Datos de entrada no válidos.',
-                'data' => $response // Retornar los errores de validación
-            ], 200); // Código de estado 422 para errores de validación
-        }catch(\Throwable $th){
+                'message' => 'Roles encontradas',
+                'data' => $response
+            ], 200);
+        
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            // Manejar el caso cuando no se encuentran organizaciones (404)
             return response()->json([
                 'status' => false,
-                'message' => $th->getMessage()
-            ], 500); // Código de estado 500 para errores generales
-        }
+                'message' => $e->getMessage()
+            ], 404);
+        } catch (\Exception $e) {
+            // Manejo de errores generales (500)
+            return response()->json([
+                'status' => false,
+                'message' => 'Error al obtener las roles: ' . $e->getMessage()
+            ], 500);
+        } 
     }
 
     /**
@@ -73,7 +89,30 @@ class RolesController extends Controller
      */
     public function show(string $id)
     {
-        //
+        try {
+            // Buscar la organización por su ID
+            $roles = Roles::where('idrol', $id)->firstOrFail();
+    
+            // Retornar una respuesta exitosa con los detalles de la organización
+            return response()->json([
+                'status' => true,
+                'message' => 'Roles de usuarios encontrada',
+                'data' => $roles
+            ], 200); // Código de estado 200 para una solicitud exitosa
+    
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            // Si no se encuentra la organización, retornar un error 404
+            return response()->json([
+                'status' => false,
+                'message' => 'Roles de usuarios no encontrada'
+            ], 404);
+        } catch (\Exception $e) {
+            // Manejo de errores generales
+            return response()->json([
+                'status' => false,
+                'message' => 'Error al obtener la roles: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -87,18 +126,14 @@ class RolesController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, int $id)
+    public function update(StoreRolesRequest $request, int $id)
     {
+        // return $request->all();
         try {
             // Buscar el usuario por iduser
             $response = Roles::where('idrol', $id)->firstOrFail();
-
-            // Validar los datos del request
-            $validatedData = $request->validate([
-                'rol' => 'sometimes|string|min:3|max:30|unique:roles,rol,' . $id . ',idrol', 
-            ]);
-            // Actualizar el usuario con los datos validados
-            $response->update($validatedData);
+            // Actualizar los datos de la organización con los datos validados
+            $response->update($request->validated());
 
             return response()->json([
                 'status' => true,
