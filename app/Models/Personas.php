@@ -25,13 +25,19 @@ class Personas extends Model implements Auditable
         'codper',
         'email',
         'celular',
-        'fechanacimiento',
+        'fechnacimeinto',
         'gsanguineo',
+        'carnetmil',
+        'carnetseg',
+        'tipoper',
+        'estserv',
         'idfuerza',
         'idespecialidad',
         'idgrado',
         'idsexo',
         'idarma',
+        'idcv',
         'status'
     ];
+    
 }

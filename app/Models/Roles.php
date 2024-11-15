@@ -24,6 +24,7 @@ class Roles extends Model implements Auditable // Extiende de Model
      */
     protected $fillable = [
         'rol',         // Nombre del rol
+        'status'
     ];
 
     /**

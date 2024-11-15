@@ -13,8 +13,7 @@ return new class extends Migration
     {
         Schema::create('especialidades', function (Blueprint $table) {
             $table->increments('idespecialidad');  
-            $table->string('especialidad', 50); 
-            $table->string('abrespecialidad', 30); 
+            $table->string('especialidad', 50);  
             $table->boolean('status');         // varchar(50)
             $table->timestamps();  // created_at & updated_at timestamps
         });

@@ -88,6 +88,7 @@ PARA CREAR LAS TABLASE MIGRACION
 CRERA CONTROLADORES DESDE EL TERMINAL
 ## php artisan make:controller Api/ExampleController --resource
 ## php artisan make:model Example
+## php artisan make:seeder TipoNovedadSeeder
 ejecuta la sembradora con el siguiente comando:
 ## php artisan db:seed --class=TipoNovedadSeeder
 

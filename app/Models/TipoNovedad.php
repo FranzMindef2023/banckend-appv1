@@ -11,12 +11,14 @@ class TipoNovedad extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
     use HasFactory, Notifiable;
+    // Define el nombre correcto de la tabla
+    protected $table = 'tiponovedad';
 
     // Establecer la clave primaria
     protected $primaryKey = 'idnov';
 
     // Campos que pueden ser asignados en masa
     protected $fillable = [
-        'novedad'
+        'novedad','status'
     ];
 }

@@ -30,7 +30,8 @@ class StoreRolesRequest extends FormRequest
                     'string',
                     'min:3',
                     'max:30',
-                    Rule::unique('roles', 'rol')->ignore($id, 'idrol')]
+                    Rule::unique('roles', 'rol')->ignore($id, 'idrol')],
+                    'status' => 'required|boolean',
         ];
     }
     public function messages()
@@ -39,6 +40,7 @@ class StoreRolesRequest extends FormRequest
             'rol.required' => 'El rol de usuario es obligatorio.',
             'rol.min' => 'El rol debe tener al menos 3 caracteres.',
             'rol.unique' => 'Este rol de usuario ya existe',
+            'status.boolean' => 'El campo de estado debe ser verdadero o falso.',
         ];
     }
     protected function failedValidation(Validator $validator)

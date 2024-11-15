@@ -87,7 +87,7 @@ class RolesController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(int $id)
     {
         try {
             // Buscar la organización por su ID

@@ -35,6 +35,7 @@ class StoreOrganizacionRequest extends FormRequest
                 Rule::unique('organizacion', 'sigla')->ignore($id, 'idorg')
             ],
             'idpadre' => 'nullable|integer|exists:organizacion,idorg',
+            'status' => 'required|boolean',
         ];
     }
     public function messages()
@@ -50,6 +51,7 @@ class StoreOrganizacionRequest extends FormRequest
             'sigla.unique' => 'La sigla ya existe.',
 
             'idpadre.exists' => 'La organización superior seleccionada no existe.',
+            'status.boolean' => 'El campo de estado debe ser verdadero o falso.',
         ];
     }
      protected function failedValidation(Validator $validator)

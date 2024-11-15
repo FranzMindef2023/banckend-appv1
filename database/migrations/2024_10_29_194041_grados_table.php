@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('grado', 50); 
             $table->string('abregrado', 30); 
             $table->string('categoria', 30); 
-            $table->boolean('status');         // varchar(50)
+            $table->boolean('status');         
             $table->timestamps();  // created_at & updated_at timestamps
         });
     }

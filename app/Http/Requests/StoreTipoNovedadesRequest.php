@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Validation\Rule;
 
 class StoreTipoNovedadesRequest extends FormRequest
 {
@@ -23,8 +24,14 @@ class StoreTipoNovedadesRequest extends FormRequest
      */
     public function rules(): array
     {
+        $id = $this->route('tiponovedade') ?? null;
         return [
-            'novedad' => 'required|string|max:100|unique:tiponovedad,novedad',
+            'novedad' => ['required',
+                        'string',
+                        'max:100',
+                        Rule::unique('tiponovedad', 'novedad')->ignore($id, 'idnov')
+                        ],
+                        'status' => 'required|boolean',
         ];
     }
     public function messages()
@@ -34,6 +41,7 @@ class StoreTipoNovedadesRequest extends FormRequest
             'novedad.string' => 'El nombre de la novedad debe ser un texto.',
             'novedad.max' => 'El nombre de la novedad no debe superar los 100 caracteres.',
             'novedad.unique' => 'El nombre de la novedad ya existe.',
+            'status.boolean' => 'El campo de estado debe ser verdadero o falso.',
         ];
     }
      protected function failedValidation(Validator $validator)

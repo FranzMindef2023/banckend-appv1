@@ -34,12 +34,8 @@ class StorePuestosRequest extends FormRequest
                 'max:100',
                 Rule::unique('puestos', 'nompuesto')->ignore($id, 'idpuesto')
             ],
-            'sigla' => [
-                'required',
-                'string',
-                'max:10',
-                Rule::unique('puestos', 'sigla')->ignore($id, 'idpuesto')
-            ]
+            'status' => 'required|boolean',
+ 
         ];
     }
     public function messages()
@@ -49,11 +45,7 @@ class StorePuestosRequest extends FormRequest
             'nompuesto.string' => 'El nombre del puesto debe ser un texto.',
             'nompuesto.max' => 'El nombre del puesto no debe superar los 100 caracteres.',
             'nompuesto.unique' => 'El nombre del puesto ya existe.',
-
-            'sigla.required' => 'La sigla es obligatoria.',
-            'sigla.string' => 'La sigla debe ser un texto.',
-            'sigla.max' => 'La sigla no debe superar los 10 caracteres.',
-            'sigla.unique' => 'La sigla ya existe.'
+            'status.boolean' => 'El campo de estado debe ser verdadero o falso.',
         ];
     }
      protected function failedValidation(Validator $validator)

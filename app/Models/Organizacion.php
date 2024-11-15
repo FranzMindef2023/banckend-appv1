@@ -20,7 +20,8 @@ class Organizacion extends Model implements Auditable
     protected $fillable = [
         'nomorg',
         'sigla',
-        'idpadre'
+        'idpadre',
+        'status'
     ];
     // Relación para obtener las organizaciones hijas
     public function hijos()
