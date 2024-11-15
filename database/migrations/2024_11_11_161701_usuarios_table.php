@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->increments('iduser');                // int8, primary key
-            $table->string('ci');                        // varchar, no length specified, but could be added
+            $table->string('ci');   
+            $table->string('grado', 50);                     // varchar, no length specified, but could be added
             $table->string('nombres', 50);               // varchar(50)
             $table->string('appaterno', 50);             // varchar(50)
             $table->string('apmaterno', 50);             // varchar(50)

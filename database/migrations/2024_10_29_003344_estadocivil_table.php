@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sexos', function (Blueprint $table) {
-            $table->increments('idsexo');  
-            $table->string('sexo', 50); 
-            $table->boolean('status');         // varchar(50)
-            $table->timestamps();  // created_at & updated_at timestamps
+        Schema::create('statuscv', function (Blueprint $table) {
+            $table->bigIncrements('idcv'); // Usar 'idcv' como clave primaria
+            $table->string('name', 50)->unique(); // Nombre del estado civil
+            $table->boolean('status'); // Estado activo/inactivo
+            $table->timestamps();
         });
-             
     }
 
     /**
@@ -25,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sexos');
+        Schema::dropIfExists('statuscv');
     }
 };

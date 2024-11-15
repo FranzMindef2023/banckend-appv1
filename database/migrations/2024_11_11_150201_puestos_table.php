@@ -17,46 +17,7 @@ return new class extends Migration
             $table->boolean('status');  
             $table->timestamps();            // created_at y updated_at
         });
-        DB::table('puestos')->insert([
-            'nompuesto' => 'MINISTRO',
-            'status' => true],
-            [
-            'nompuesto' => 'VICEMINISTRO',
-            'status' => true
-            ],
-            [
-            'nompuesto' => 'DIRECTOR GENERAL',
-            'status' => true
-            ],
-            [
-            'nompuesto' => 'JEFE DE UNIDAD',
-            'status' => true
-            ],
-            [
-            'nompuesto' => 'RESPONSABLE DE SECCIÓN',
-            'status' => true
-            ],
-            [
-            'nompuesto' => 'TECNICO',
-            'status' => true
-            ],
-            [
-            'nompuesto' => 'SEGURIDAD',
-            'status' => true
-            ],
-            [
-            'nompuesto' => 'COMANDANTE',
-            'status' => true
-            ],
-            [
-            'nompuesto' => 'JEFE DE GABINETE',
-            'status' => true
-            ],
-            [
-            'nompuesto' => 'AYUDANTE',
-            'status' => true
-            ]
-        );
+             
     }
 
     /**

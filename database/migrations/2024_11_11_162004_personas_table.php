@@ -16,18 +16,24 @@ return new class extends Migration
             $table->string('nombres', 50);               // varchar(50)
             $table->string('appaterno', 50)->nullable();             // varchar(50)
             $table->string('apmaterno', 50)->nullable();             // varchar(50)
-            $table->string('ci');  
+            $table->bigInteger('ci');  
             $table->string('complemento')->nullable();                      // varchar, no length specified, but could be added
             $table->string('codper')->nullable();
+            $table->string('carnetmil')->nullable();
+            $table->string('carnetseg')->nullable();
             $table->string('email', 250)->unique();      // varchar(250), unique
-            $table->bigInteger('celular');               // int8             
+            $table->bigInteger('celular');             // int8             
             $table->date('fechnacimeinto');  
-            $table->string('gsanguineo',50);                 // bool
+            $table->string('gsanguineo',50);
+            $table->string('tipoper',5);//CIVIL o MILITAR 
+            $table->string('estserv',5);//ACTIVO o PASIVO  
+
             $table->unsignedBigInteger('idfuerza');
             $table->unsignedBigInteger('idespecialidad');
             $table->unsignedBigInteger('idgrado');
             $table->unsignedBigInteger('idsexo');
             $table->unsignedBigInteger('idarma');
+            $table->unsignedBigInteger('idcv');
             $table->boolean('status'); 
             $table->timestamps();                        // created_at & updated_at timestamps
             // Foreign keys
@@ -36,6 +42,7 @@ return new class extends Migration
             $table->foreign('idgrado')->references('idgrado')->on('grados')->onDelete('cascade');
             $table->foreign('idsexo')->references('idsexo')->on('sexos')->onDelete('cascade');
             $table->foreign('idarma')->references('idarma')->on('armas')->onDelete('cascade');
+            $table->foreign('idcv')->references('idcv')->on('statuscv')->onDelete('cascade');
         }); 
     }
 
