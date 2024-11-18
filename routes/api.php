@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\NovedadesController;
 use App\Http\Controllers\Api\PersonasController;
 use App\Http\Controllers\Api\PuestosController;
 use App\Http\Controllers\Api\TipoNovedadesController;
+use App\Http\Controllers\Api\AssignmentsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -54,4 +55,6 @@ Route::middleware(['jwt.verify'])->group(function () {
     Route::apiResource('puestos', PuestosController::class);
     Route::apiResource('tiponovedades', TipoNovedadesController::class);
     Route::apiResource('persona', PersonasController::class);
+    Route::apiResource('assignments', AssignmentsController::class);
+    Route::post('changeAssignment', [AssignmentsController::class, 'changeAssignment']);
 });

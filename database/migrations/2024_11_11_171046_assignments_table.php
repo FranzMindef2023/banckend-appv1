@@ -19,6 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('idpuesto');
             $table->date('startdate'); 
             $table->date('enddate')->nullable(); 
+            $table->boolean('status'); 
             $table->timestamps();                        // created_at & updated_at timestamps
             // Foreign keys
             $table->foreign('idpersona')->references('idpersona')->on('personas')->onDelete('cascade');

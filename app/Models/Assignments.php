@@ -22,6 +22,7 @@ class Assignments extends Model implements Auditable
         'idorg',
         'idpuesto',
         'startdate',
-        'enddate'
+        'enddate',
+        'status'
     ];
 }

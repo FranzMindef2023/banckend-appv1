@@ -119,6 +119,7 @@ class AuthController extends Controller
 {
     $validator = Validator::make($request->all(), [
         'ci' => 'required|string|unique:users,ci',
+        'grado' => 'required|string|min:3|max:30',
         'nombres' => 'required|string|min:3|max:255',
         'appaterno' => 'nullable|string|min:3|max:255',
         'apmaterno' => 'nullable|string|min:3|max:255',
@@ -127,6 +128,8 @@ class AuthController extends Controller
         'usuario' => 'required|string|min:3|max:255|unique:users,usuario',
         'password' => 'required|min:8',
         'status' => 'required|boolean',
+        'idorg' => 'required|integer|exists:organizacion,idorg',
+        'idpuesto' => 'required|integer|exists:puestos,idpuesto',
     ]);
 
     if ($validator->fails()) {

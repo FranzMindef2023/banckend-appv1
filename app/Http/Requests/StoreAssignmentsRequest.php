@@ -23,13 +23,17 @@ class StoreAssignmentsRequest extends FormRequest
      */
     public function rules(): array
     {
+        // Obtener el ID del recurso actual desde la ruta
+        $id = $this->route('assignment') ?? null;
+        
         return [
             'gestion' => 'required|integer|min:2000|max:' . date('Y'),
             'idpersona' => 'required|exists:personas,idpersona',
             'idorg' => 'required|exists:organizacion,idorg',
             'idpuesto' => 'required|exists:puestos,idpuesto',
-            'startdate' => 'required|date|before_or_equal:enddate',
+            'startdate' => 'required|date',
             'enddate' => 'nullable|date|after_or_equal:startdate',
+            'status' => 'required|boolean',
         ];
     }
     public function messages()
@@ -55,6 +59,7 @@ class StoreAssignmentsRequest extends FormRequest
 
             'enddate.date' => 'La fecha de fin debe ser una fecha válida.',
             'enddate.after_or_equal' => 'La fecha de fin debe ser posterior o igual a la fecha de inicio.',
+            'status.boolean' => 'El campo de estado debe ser verdadero o falso.',
         ];
     }
      protected function failedValidation(Validator $validator)

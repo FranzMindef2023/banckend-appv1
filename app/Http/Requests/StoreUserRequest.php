@@ -22,6 +22,7 @@ class StoreUserRequest extends FormRequest
             'ci' => ['required',
                     'string',
                     Rule::unique('users', 'ci')->ignore($id, 'iduser')],
+            'grado' => 'required|string|min:3|max:30',
             'nombres' => 'required|string|min:3|max:50',
             'appaterno' => 'nullable|string|min:3|max:50',
             'apmaterno' => 'nullable|string|min:3|max:50',
@@ -47,6 +48,9 @@ class StoreUserRequest extends FormRequest
         return [
             'ci.required' => 'El CI es obligatorio.',
             'ci.unique' => 'Este CI ya está en uso.',
+            'grado.required' => 'El grado es obligatorio.',
+            'grado.min' => 'El grado debe tener al menos 3 caracteres.',
+
             'nombres.required' => 'El nombre es obligatorio.',
             'nombres.min' => 'El nombre debe tener al menos 3 caracteres.',
             'appaterno.min' => 'El apellido paterno debe tener al menos 3 caracteres.',

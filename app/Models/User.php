@@ -44,6 +44,7 @@ class User extends Authenticatable implements JWTSubject,Auditable
      */
     protected $fillable = [
         'ci',         // Cédula de identidad
+        'grado',
         'nombres',    // Nombres
         'appaterno',  // Apellido paterno
         'apmaterno',  // Apellido materno
@@ -52,6 +53,8 @@ class User extends Authenticatable implements JWTSubject,Auditable
         'usuario',    // Nombre de usuario
         'password',   // Contraseña
         'status',     // Estado
+        'idorg',
+        'idpuesto'
     ];
 
     /**
