@@ -20,6 +20,7 @@ return new class extends Migration
             $table->date('startdate'); 
             $table->date('enddate')->nullable(); 
             $table->boolean('status'); 
+            $table->string('motivo',150); 
             $table->timestamps();                        // created_at & updated_at timestamps
             // Foreign keys
             $table->foreign('idpersona')->references('idpersona')->on('personas')->onDelete('cascade');

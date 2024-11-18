@@ -16,6 +16,7 @@ class OrganizacionSeeder extends Seeder
         DB::table('organizacion')->insert([
             'nomorg' => 'MINSITERIO',
             'sigla' => 'MINDEF',
+            'idubigeo' => 54,
             'status' => true,
             'idpadre' => 0,
             'created_at' => now(),

@@ -23,6 +23,7 @@ class Assignments extends Model implements Auditable
         'idpuesto',
         'startdate',
         'enddate',
-        'status'
+        'status',
+        'motivo'
     ];
 }

@@ -60,10 +60,11 @@ class AssignmentsController extends Controller
             $data = $request->validated();
 
             // Verificar si se envió el idassig anterior para finalizar la asignación previa
-            if (isset($data['idassig'])) {
-                return $request->all();
-                // Finalizar la asignación anterior usando el id proporcionado
-                $previousAssignment = Assignments::find($data['idassig']);
+            if ($request->has('idassig')) {
+                $id = $request->input('idassig');
+
+                    // Finalizar la asignación anterior usando el id proporcionado
+                    $previousAssignment = Assignments::where('idassig', $id)->firstOrFail();
                 
                 if ($previousAssignment) {
                     $previousAssignment->update([
@@ -131,7 +132,7 @@ class AssignmentsController extends Controller
             // Si no se encuentra el ID, retornar un error 404
             return response()->json([
                 'status' => false,
-                'message' => 'Persona no encontrado'
+                'message' => 'asignacion de la persona no encontrado'
             ], 404);
         } catch (\Exception $e) {
             // Manejo de errores generales

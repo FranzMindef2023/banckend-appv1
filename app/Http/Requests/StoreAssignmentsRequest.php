@@ -34,6 +34,7 @@ class StoreAssignmentsRequest extends FormRequest
             'startdate' => 'required|date',
             'enddate' => 'nullable|date|after_or_equal:startdate',
             'status' => 'required|boolean',
+            'motivo' => 'nullable|string|max:255', // Agregado para el campo motivo
         ];
     }
     public function messages()
@@ -59,9 +60,15 @@ class StoreAssignmentsRequest extends FormRequest
 
             'enddate.date' => 'La fecha de fin debe ser una fecha válida.',
             'enddate.after_or_equal' => 'La fecha de fin debe ser posterior o igual a la fecha de inicio.',
+
             'status.boolean' => 'El campo de estado debe ser verdadero o falso.',
+
+            // Mensajes para el campo motivo
+            'motivo.string' => 'El motivo debe ser un texto válido.',
+            'motivo.max' => 'El motivo no puede tener más de 255 caracteres.',
         ];
     }
+
      protected function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(response()->json([

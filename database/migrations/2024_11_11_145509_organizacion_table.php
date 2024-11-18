@@ -16,8 +16,11 @@ return new class extends Migration
             $table->string('nomorg');        // Nombre de la organización
             $table->string('sigla', 50);     // Sigla de la organización
             $table->bigInteger('idpadre')->nullable(); // idpadre como bigint, nullable si puede ser raíz
+            $table->unsignedBigInteger('idubigeo');
             $table->boolean('status');   
             $table->timestamps();            // created_at y updated_at
+            // Foreign keys
+            $table->foreign('idubigeo')->references('idubigeo')->on('ubigeo')->onDelete('cascade');
         });
         
     }

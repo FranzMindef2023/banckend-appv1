@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\PuestosController;
 use App\Http\Controllers\Api\TipoNovedadesController;
 use App\Http\Controllers\Api\AssignmentsController;
 
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -57,4 +58,6 @@ Route::middleware(['jwt.verify'])->group(function () {
     Route::apiResource('persona', PersonasController::class);
     Route::apiResource('assignments', AssignmentsController::class);
     Route::post('changeAssignment', [AssignmentsController::class, 'changeAssignment']);
+    Route::put('updateEndDate/{id}', [AssignmentsController::class, 'updateEndDate']);
+    Route::apiResource('novedades', NovedadesController::class);
 });
