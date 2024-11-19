@@ -21,4 +21,8 @@ class TipoNovedad extends Model implements Auditable
     protected $fillable = [
         'novedad','status'
     ];
+    public function novedades()
+    {
+        return $this->hasMany(Novedades::class, 'idnov', 'idnov');
+    }
 }

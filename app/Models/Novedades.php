@@ -24,4 +24,9 @@ class Novedades extends Model implements Auditable
         'enddate',
         'activo'
     ];
+    // Relación con el modelo TipoNovedad
+    public function tipoNovedad()
+    {
+        return $this->belongsTo(TipoNovedad::class, 'idnov', 'idnov');
+    }
 }
