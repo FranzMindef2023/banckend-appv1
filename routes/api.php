@@ -60,5 +60,5 @@ Route::middleware(['jwt.verify'])->group(function () {
     Route::post('changeAssignment', [AssignmentsController::class, 'changeAssignment']);
     Route::put('updateEndDate/{id}', [AssignmentsController::class, 'updateEndDate']);
     Route::apiResource('novedades', NovedadesController::class);
-    Route::get('indexVigentes', [AssignmentsController::class, 'indexVigentes']);
+    Route::get('indexVigentes', [NovedadesController::class, 'indexVigentes']);
 });
