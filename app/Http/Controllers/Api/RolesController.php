@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 use App\Models\Roles; // <- Importación de User
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\DB;
 
 class RolesController extends Controller
 {
@@ -21,23 +22,29 @@ class RolesController extends Controller
     {
         try {
             // Obtener todas las organizaciones de la base de datos
-            $response = Roles::all();
-        
-            // Verificar si no se encontraron organizaciones
-            if ($response->isEmpty()) {
-                // Si no se encuentra ninguna organización, retornar un error 404
+            $roles = Roles::select([
+                'idrol as id',
+                'rol as name',
+                DB::raw("CASE WHEN status = true THEN 'Activo' ELSE 'Inactivo' END as status"),
+                DB::raw("TO_CHAR(created_at, 'DD/MM/YYYY HH24:MI:SS') as fcreate"), // Formato dd/MM/YYYY HH:MM:SS para created_at
+                DB::raw("TO_CHAR(updated_at, 'DD/MM/YYYY HH24:MI:SS') as fupdate")  // Formato dd/MM/YYYY HH:MM:SS para updated_at
+            ])->get();
+
+            // Verificar si no se encontraron roles
+            if ($roles->isEmpty()) {
+                // Si no se encuentra ningún rol, retornar un error 404
                 throw new \Illuminate\Database\Eloquent\ModelNotFoundException('No se encontraron roles.');
             }
-        
-            // Retornar una respuesta exitosa con los datos encontrados
+
+            // Retornar una respuesta exitosa con los datos transformados
             return response()->json([
                 'status' => true,
-                'message' => 'Roles encontradas',
-                'data' => $response
+                'message' => 'Roles encontrados',
+                'data' => $roles
             ], 200);
-        
+
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            // Manejar el caso cuando no se encuentran organizaciones (404)
+            // Manejar el caso cuando no se encuentran roles (404)
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage()
@@ -46,10 +53,11 @@ class RolesController extends Controller
             // Manejo de errores generales (500)
             return response()->json([
                 'status' => false,
-                'message' => 'Error al obtener las roles: ' . $e->getMessage()
+                'message' => 'Error al obtener los roles: ' . $e->getMessage()
             ], 500);
-        } 
+        }
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -65,24 +73,32 @@ class RolesController extends Controller
     public function store(StoreRolesRequest $request)
     {
         try {
-            // Crea el usuario utilizando los datos validados del request
-            $user = Roles::create(array_merge(
-                $request->validated()
-            ));
+            // Crea el rol utilizando los datos validados del request
+            $role = Roles::create($request->validated());
 
             return response()->json([
                 'status' => true,
                 'message' => 'Rol de usuario registrado correctamente',
-                'data'=> $request->all()
+                'data' => $role,
             ], 200);
-            
-        } catch (\Throwable $th) {
+
+        } catch (ValidationException $e) {
+            // Maneja errores de validación y devuelve un código 422
             return response()->json([
                 'status' => false,
-                'message' => $th->getMessage()
-            ], 500); // Código de estado 500 para errores generales
+                'message' => 'Errores de validación',
+                'errors' => $e->errors(), // Devuelve los errores de validación en detalle
+            ], 422);
+
+        } catch (\Throwable $th) {
+            // Maneja otros errores generales
+            return response()->json([
+                'status' => false,
+                'message' => 'Error interno del servidor: ' . $th->getMessage(),
+            ], 500);
         }
     }
+
 
     /**
      * Display the specified resource.

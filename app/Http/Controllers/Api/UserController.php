@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use App\Models\User; // <- Importación de User 
 use App\Models\UserRole;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -22,7 +23,17 @@ class UserController extends Controller
     {
         try {
             // Obtener todas las organizaciones de la base de datos
-            $users = User::all();
+            $users = User::select([
+                'iduser as id',
+                DB::raw("CONCAT(grado, ' ', appaterno, ' ', apmaterno, ' ', nombres) as name"), // Concatenar las columnas
+                'email',
+                'celular',
+                'usuario',
+                DB::raw("TO_CHAR(last_login, 'DD/MM/YYYY HH24:MI:SS') as lastlogin"), // Formatear fecha de último login
+                DB::raw("CASE WHEN status = true THEN 'Activo' ELSE 'Inactivo' END as status"), // Transformar estado
+                DB::raw("TO_CHAR(created_at, 'DD/MM/YYYY HH24:MI:SS') as fcreate"), // Formatear created_at
+                DB::raw("TO_CHAR(updated_at, 'DD/MM/YYYY HH24:MI:SS') as fupdate")  // Formatear updated_at
+            ])->get();
         
             // Verificar si no se encontraron puesto
             if ($users->isEmpty()) {
