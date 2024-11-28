@@ -24,16 +24,24 @@ class UserController extends Controller
         try {
             // Obtener todas las organizaciones de la base de datos
             $users = User::select([
-                'iduser as id',
-                DB::raw("CONCAT(grado, ' ', appaterno, ' ', apmaterno, ' ', nombres) as name"), // Concatenar las columnas
-                'email',
-                'celular',
-                'usuario',
-                DB::raw("TO_CHAR(last_login, 'DD/MM/YYYY HH24:MI:SS') as lastlogin"), // Formatear fecha de último login
-                DB::raw("CASE WHEN status = true THEN 'Activo' ELSE 'Inactivo' END as status"), // Transformar estado
-                DB::raw("TO_CHAR(created_at, 'DD/MM/YYYY HH24:MI:SS') as fcreate"), // Formatear created_at
-                DB::raw("TO_CHAR(updated_at, 'DD/MM/YYYY HH24:MI:SS') as fupdate")  // Formatear updated_at
-            ])->get();
+                'users.iduser as id',
+                DB::raw("CONCAT(users.grado, ' ', users.appaterno, ' ', users.apmaterno, ' ', users.nombres) as name"), // Concatenar las columnas
+                'users.email',
+                'users.celular',
+                'users.usuario',
+                'users.idorg',
+                'users.idpuesto',
+                DB::raw("TO_CHAR(users.last_login, 'DD/MM/YYYY HH24:MI:SS') as lastlogin"), // Formatear fecha de último login
+                DB::raw("CASE WHEN users.status = true THEN 'Activo' ELSE 'Inactivo' END as status"), // Transformar estado
+                DB::raw("TO_CHAR(users.created_at, 'DD/MM/YYYY HH24:MI:SS') as fcreate"), // Formatear created_at
+                DB::raw("TO_CHAR(users.updated_at, 'DD/MM/YYYY HH24:MI:SS') as fupdate"), // Formatear updated_at
+                'puestos.nompuesto as puesto', // Nombre del puesto
+                'organizacion.nomorg as organizacion', // Nombre de la organización
+                'organizacion.sigla as sigla' // Sigla de la organización
+            ])
+            ->join('puestos', 'users.idpuesto', '=', 'puestos.idpuesto') // Join con la tabla puestos
+            ->join('organizacion', 'users.idorg', '=', 'organizacion.idorg') // Join con la tabla organizacion
+            ->get();
         
             // Verificar si no se encontraron puesto
             if ($users->isEmpty()) {
@@ -137,6 +145,11 @@ class UserController extends Controller
      * Update the specified resource in storage.
      */
     public function update(StoreUserRequest $request, int $id){
+        return response()->json([
+            'status' => true,
+            'message' => 'Usuario actualizado correctamente',
+            'data' => $request->all()
+        ], 200);
         try {
             // Buscar el usuario por iduser
             $user = User::where('iduser', $id)->firstOrFail();
