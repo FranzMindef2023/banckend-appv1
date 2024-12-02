@@ -13,6 +13,7 @@ use App\Models\User; // <- Importación de User
 use App\Models\UserRole;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
+use App\Models\Roles; 
 
 class UserController extends Controller
 {
@@ -25,14 +26,20 @@ class UserController extends Controller
             // Obtener todas las organizaciones de la base de datos
             $users = User::select([
                 'users.iduser as id',
+                'users.grado',
+                'users.appaterno',
+                'users.apmaterno',
+                'users.nombres',
+                'users.ci',
                 DB::raw("CONCAT(users.grado, ' ', users.appaterno, ' ', users.apmaterno, ' ', users.nombres) as name"), // Concatenar las columnas
                 'users.email',
                 'users.celular',
                 'users.usuario',
                 'users.idorg',
                 'users.idpuesto',
+                'users.status',
                 DB::raw("TO_CHAR(users.last_login, 'DD/MM/YYYY HH24:MI:SS') as lastlogin"), // Formatear fecha de último login
-                DB::raw("CASE WHEN users.status = true THEN 'Activo' ELSE 'Inactivo' END as status"), // Transformar estado
+                DB::raw("CASE WHEN users.status = true THEN 'Activo' ELSE 'Inactivo' END as estado"), // Transformar estado
                 DB::raw("TO_CHAR(users.created_at, 'DD/MM/YYYY HH24:MI:SS') as fcreate"), // Formatear created_at
                 DB::raw("TO_CHAR(users.updated_at, 'DD/MM/YYYY HH24:MI:SS') as fupdate"), // Formatear updated_at
                 'puestos.nompuesto as puesto', // Nombre del puesto
@@ -144,26 +151,22 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(StoreUserRequest $request, int $id){
-        return response()->json([
-            'status' => true,
-            'message' => 'Usuario actualizado correctamente',
-            'data' => $request->all()
-        ], 200);
+    public function update(StoreUserRequest $request, int $id)
+    {
         try {
             // Buscar el usuario por iduser
             $user = User::where('iduser', $id)->firstOrFail();
 
-            // Validar los datos del request
-            $user->update($request->validated());
+            // Obtener los datos validados del request
+            $validatedData = $request->validated();
 
             // Verificar si se proporcionó un valor de contraseña no vacío
-                if ($request->filled('password')) {
-                    $validatedData['password'] = bcrypt($request->password);
-                } else {
-                    // Si el password está vacío, eliminamos el campo para evitar actualizarlo con un valor vacío
-                    unset($validatedData['password']);
-                }
+            if ($request->filled('password')) {
+                $validatedData['password'] = bcrypt($validatedData['password']);
+            } else {
+                // Si no se proporciona contraseña, eliminarla de los datos validados
+                unset($validatedData['password']);
+            }
 
             // Actualizar el usuario con los datos validados
             $user->update($validatedData);
@@ -171,20 +174,21 @@ class UserController extends Controller
             return response()->json([
                 'status' => true,
                 'message' => 'Usuario actualizado correctamente',
-                'data' => $user
+                'data' => $user,
             ], 200); // Código de estado 200 para éxito
         } catch (ModelNotFoundException $e) {
             return response()->json([
                 'status' => false,
-                'message' => 'Usuario no encontrado'
+                'message' => 'Usuario no encontrado',
             ], 404); // Código de estado 404 para no encontrado
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
-                'message' => 'Error al actualizar el usuario: ' . $th->getMessage()
+                'message' => 'Error al actualizar el usuario: ' . $th->getMessage(),
             ], 500); // Código de estado 500 para errores generales
         }
     }
+
 
 
 
@@ -229,6 +233,46 @@ class UserController extends Controller
                 'status' => false,
                 'message' => 'Error al registrar el rol de usuario: ' . $th->getMessage()
             ], 500); // Código de estado 500 para errores generales
+        }
+    }
+    public function showroluser(int $id)
+    {
+        try {
+            // Roles asignados al usuario con status en true
+            $assignedRoles = \DB::table('roles')
+                ->join('user_roles', 'roles.idrol', '=', 'user_roles.idrol')
+                ->where('user_roles.iduser', $id)
+                ->where('roles.status', true) // Filtrar por status true
+                ->select('roles.idrol', 'roles.rol', \DB::raw('1 as assigned'))
+                ->get();
+
+            // Roles no asignados al usuario con status en true
+            $unassignedRoles = \DB::table('roles')
+                ->leftJoin('user_roles', function ($join) use ($id) {
+                    $join->on('roles.idrol', '=', 'user_roles.idrol')
+                        ->where('user_roles.iduser', '=', $id);
+                })
+                ->whereNull('user_roles.idrol')
+                ->where('roles.status', true) // Filtrar por status true
+                ->select('roles.idrol', 'roles.rol', \DB::raw('0 as assigned'))
+                ->get();
+
+            // Combinar los roles asignados y no asignados
+            $roles = $assignedRoles->merge($unassignedRoles);
+
+            // Retornar la respuesta exitosa
+            return response()->json([
+                'status' => true,
+                'message' => 'Roles encontrados para el usuario',
+                'data' => $roles
+            ], 200);
+
+        } catch (\Exception $e) {
+            // Manejo de errores generales
+            return response()->json([
+                'status' => false,
+                'message' => 'Error al obtener los roles: ' . $e->getMessage()
+            ], 500);
         }
     }
 
