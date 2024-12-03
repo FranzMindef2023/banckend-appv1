@@ -14,7 +14,12 @@ use App\Http\Controllers\Api\PuestosController;
 use App\Http\Controllers\Api\TipoNovedadesController;
 use App\Http\Controllers\Api\AssignmentsController;
 
-
+use App\Http\Controllers\Api\ArmasController;
+use App\Http\Controllers\Api\EspecialidadesController;
+use App\Http\Controllers\Api\EstadocvController;
+use App\Http\Controllers\Api\FuerzasController;
+use App\Http\Controllers\Api\GradosController;
+use App\Http\Controllers\Api\SexoController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -62,4 +67,11 @@ Route::middleware(['jwt.verify'])->group(function () {
     Route::put('updateEndDate/{id}', [AssignmentsController::class, 'updateEndDate']);
     Route::apiResource('novedades', NovedadesController::class);
     Route::get('indexVigentes', [NovedadesController::class, 'indexVigentes']);
+
+    Route::apiResource('armas', ArmasController::class);
+    Route::apiResource('especialidades', EspecialidadesController::class);
+    Route::apiResource('estadocv', EstadocvController::class);
+    Route::apiResource('fuerzas', FuerzasController::class);
+    Route::apiResource('grados', GradosController::class);
+    Route::apiResource('sexos', SexoController::class);
 });
