@@ -23,7 +23,8 @@ return new class extends Migration
             $table->string('carnetseg')->nullable();
             $table->string('email', 250)->unique();      // varchar(250), unique
             $table->bigInteger('celular');             // int8             
-            $table->date('fechnacimeinto');  
+            $table->date('fechnacimeinto');
+            $table->date('fechaegreso');  
             $table->string('gsanguineo',50);
             $table->string('tipoper',5);//CIVIL o MILITAR 
             $table->string('estserv',5);//ACTIVO o PASIVO  
@@ -34,6 +35,9 @@ return new class extends Migration
             $table->unsignedBigInteger('idsexo');
             $table->unsignedBigInteger('idarma');
             $table->unsignedBigInteger('idcv');
+
+            $table->unsignedBigInteger('idsituacion');
+            $table->unsignedBigInteger('idexpedicion');
             $table->boolean('status'); 
             $table->timestamps();                        // created_at & updated_at timestamps
             // Foreign keys
@@ -43,6 +47,9 @@ return new class extends Migration
             $table->foreign('idsexo')->references('idsexo')->on('sexos')->onDelete('cascade');
             $table->foreign('idarma')->references('idarma')->on('armas')->onDelete('cascade');
             $table->foreign('idcv')->references('idcv')->on('statuscv')->onDelete('cascade');
+
+            $table->foreign('idsituacion')->references('idsituacion')->on('situaciones')->onDelete('cascade');
+            $table->foreign('idexpedicion')->references('idexpedicion')->on('expediciones')->onDelete('cascade');
         }); 
     }
 

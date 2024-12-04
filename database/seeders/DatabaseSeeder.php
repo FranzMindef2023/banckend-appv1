@@ -21,6 +21,8 @@ class DatabaseSeeder extends Seeder
             PuestosSeeder::class,
             SexosSeeder::class,
             TiponovSeeder::class,
+            ExpedicionesSeeder::class,
+            SituacionesSeeder::class,
         ]);
     }
 }
