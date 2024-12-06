@@ -7,11 +7,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
-use App\Models\Especialidades; // <- Importación de User
+use App\Models\Expediciones; // <- Importación de User
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 
-class EspecialidadesController extends Controller
+class ExpedicionesController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,24 +19,24 @@ class EspecialidadesController extends Controller
     public function index()
     {
         try {
-            // Obtener todas las especialidades de la base de datos
-            $especialidades = Especialidades::all();
+            // Obtener todos los grados de la base de datos
+            $grados = Expediciones::all();
 
-            // Verificar si no se encontraron especialidades
-            if ($especialidades->isEmpty()) {
-                // Si no se encuentra ninguna especialidad, retornar un error 404
-                throw new \Illuminate\Database\Eloquent\ModelNotFoundException('No se encontraron especialidades.');
+            // Verificar si no se encontraron grados
+            if ($grados->isEmpty()) {
+                // Si no se encuentra ningún grado, retornar un error 404
+                throw new \Illuminate\Database\Eloquent\ModelNotFoundException('No se encontraron grados.');
             }
 
             // Retornar una respuesta exitosa con los datos transformados
             return response()->json([
                 'status' => true,
-                'message' => 'Especialidades encontradas',
-                'data' => $especialidades
+                'message' => 'Grados encontrados',
+                'data' => $grados
             ], 200);
 
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            // Manejar el caso cuando no se encuentran especialidades (404)
+            // Manejar el caso cuando no se encuentran grados (404)
             return response()->json([
                 'status' => false,
                 'message' => $e->getMessage()
@@ -45,7 +45,7 @@ class EspecialidadesController extends Controller
             // Manejo de errores generales (500)
             return response()->json([
                 'status' => false,
-                'message' => 'Error al obtener las especialidades: ' . $e->getMessage()
+                'message' => 'Error al obtener los grados: ' . $e->getMessage()
             ], 500);
         }
     }

@@ -20,6 +20,8 @@ use App\Http\Controllers\Api\EstadocvController;
 use App\Http\Controllers\Api\FuerzasController;
 use App\Http\Controllers\Api\GradosController;
 use App\Http\Controllers\Api\SexoController;
+use App\Http\Controllers\Api\SituacionesController; 
+use App\Http\Controllers\Api\ExpedicionesController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -74,4 +76,6 @@ Route::middleware(['jwt.verify'])->group(function () {
     Route::apiResource('fuerzas', FuerzasController::class);
     Route::apiResource('grados', GradosController::class);
     Route::apiResource('sexos', SexoController::class);
+    Route::apiResource('situaciones', SituacionesController::class); 
+    Route::apiResource('expediciones', ExpedicionesController::class);
 });

@@ -20,13 +20,7 @@ class FuerzasController extends Controller
     {
         try {
             // Obtener todas las fuerzas de la base de datos
-            $fuerzas = Fuerzas::select([
-                'idfuerza as id',
-                'fuerza as name',
-                DB::raw("CASE WHEN status = true THEN 'Activo' ELSE 'Inactivo' END as status"),
-                DB::raw("TO_CHAR(created_at, 'DD/MM/YYYY HH24:MI:SS') as fcreate"), // Formato dd/MM/YYYY HH:MM:SS para created_at
-                DB::raw("TO_CHAR(updated_at, 'DD/MM/YYYY HH24:MI:SS') as fupdate")  // Formato dd/MM/YYYY HH:MM:SS para updated_at
-            ])->get();
+            $fuerzas = Fuerzas::all();
 
             // Verificar si no se encontraron fuerzas
             if ($fuerzas->isEmpty()) {

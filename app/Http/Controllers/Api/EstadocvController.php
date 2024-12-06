@@ -20,13 +20,7 @@ class EstadocvController extends Controller
     {
         try {
             // Obtener todos los registros de la tabla statuscv de la base de datos
-            $statuscv = Statuscv::select([
-                'idcv as id',
-                'name',
-                DB::raw("CASE WHEN status = true THEN 'Activo' ELSE 'Inactivo' END as status"),
-                DB::raw("TO_CHAR(created_at, 'DD/MM/YYYY HH24:MI:SS') as fcreate"), // Formato dd/MM/YYYY HH24:MI:SS para created_at
-                DB::raw("TO_CHAR(updated_at, 'DD/MM/YYYY HH24:MI:SS') as fupdate")  // Formato dd/MM/YYYY HH24:MI:SS para updated_at
-            ])->get();
+            $statuscv = Statuscv::all();
 
             // Verificar si no se encontraron registros
             if ($statuscv->isEmpty()) {

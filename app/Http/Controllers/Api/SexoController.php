@@ -20,13 +20,7 @@ class SexoController extends Controller
     {
         try {
             // Obtener todos los registros de la tabla sexos de la base de datos
-            $sexos = Sexos::select([
-                'idsexo as id',
-                'sexo as name',
-                DB::raw("CASE WHEN status = true THEN 'Activo' ELSE 'Inactivo' END as status"),
-                DB::raw("TO_CHAR(created_at, 'DD/MM/YYYY HH24:MI:SS') as fcreate"), // Formato dd/MM/YYYY HH24:MI:SS para created_at
-                DB::raw("TO_CHAR(updated_at, 'DD/MM/YYYY HH24:MI:SS') as fupdate")  // Formato dd/MM/YYYY HH24:MI:SS para updated_at
-            ])->get();
+            $sexos = Sexos::all();
 
             // Verificar si no se encontraron registros
             if ($sexos->isEmpty()) {

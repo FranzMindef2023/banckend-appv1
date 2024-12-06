@@ -20,15 +20,7 @@ class GradosController extends Controller
     {
         try {
             // Obtener todos los grados de la base de datos
-            $grados = Grados::select([
-                'idgrado as id',
-                'grado as name',
-                'abregrado as abbreviation',
-                'categoria as category',
-                DB::raw("CASE WHEN status = true THEN 'Activo' ELSE 'Inactivo' END as status"),
-                DB::raw("TO_CHAR(created_at, 'DD/MM/YYYY HH24:MI:SS') as fcreate"), // Formato dd/MM/YYYY HH:MM:SS para created_at
-                DB::raw("TO_CHAR(updated_at, 'DD/MM/YYYY HH24:MI:SS') as fupdate")  // Formato dd/MM/YYYY HH:MM:SS para updated_at
-            ])->get();
+            $grados = Grados::all();
 
             // Verificar si no se encontraron grados
             if ($grados->isEmpty()) {
